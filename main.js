@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function (ev) {
 
 let user = ""
 while (user == "") {
-    user = prompt("Please enter your name.")
+    user = prompt("Please enter your name to continue.")
 }
 
     document.querySelector('#from').value = user

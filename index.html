@@ -14,21 +14,24 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container bg-light">
+<div class="container-chat">
 <section class="content" id="chat-content">
+
+    <h2>DebChat!</h2>
 <ul id="message-list">
 
 </ul>
 </section>
-    <form class="tools form-row" id="chat-form">
-        <input id="newMessage" class="form-control col mr-2" type="text" name="message" placeholder="Message">
-        <input id="from" class="form-control col-2 mr-2" type="text" name="sender" placeholder="From">
+    <form class="tools form-row row-cols" id="chat-form">
+        <input id="from" class="form-control col-12 col-md mr-2" type="text" name="sender" placeholder="From">
+         <input id="newMessage" class="form-control col-12 col-md mr-2" type="text" name="message" placeholder="Message">
              <button class="btn btn-primary " name="submit" type="submit" > <i class="far fa-paper-plane"></i> </button>
 
     </form>
 </div>
 </div>
 
+<footer>©2021 DebChat | Made for Cool People</footer>
 
     <script src="main.js"></script>
 </body>
