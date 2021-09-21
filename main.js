@@ -1,6 +1,6 @@
 
 
-document.addEventListener('DOMContentLoaded', function (e) {
+document.addEventListener('DOMContentLoaded', function (ev) {
 
 let user = ""
 while (user == "") {
@@ -11,11 +11,11 @@ while (user == "") {
     grabMessages()
     const refreshMessages = setInterval (function() {
         grabMessages()
-    }, 1000)
+    }, 100)
 const form = document.querySelector("#chat-form")
-  form.addEventListener("submit", function(e) {
-    e.preventDefault()
-    postMessages(e.target)
+  form.addEventListener("submit", function(ev) {
+    ev.preventDefault()
+    postMessages(ev.target)
   })
 
 })
@@ -52,7 +52,7 @@ fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/", {
         form.message.value = ""
     })
 
-//   .then((data) => console.log(data))
+  .then((data) => console.log(data))
   .catch((error) => console.error("Error:", error))
 }
 
@@ -80,7 +80,7 @@ function addsToList(message) {
     sender = message.sender
   }
   return `
-    <li data-id='${message.id}'><strong>${sender}:</strong>${message.message}</li>
+    <li data-id='${message.id}'><strong>${sender}: </strong>${message.message}</li>
     `
 }
 
