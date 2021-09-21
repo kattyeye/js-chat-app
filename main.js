@@ -56,10 +56,10 @@ fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/", {
   .catch((error) => console.error("Error:", error))
 }
 
-
+//which messages are displayed on the screeen...only 10 at a time
 function showMessages(messages) {
     const length = messages.length;
-    const mostRecent = messages.slice(length - 50)
+    const mostRecent = messages.slice(length - 10)
     const list = document.querySelector('#message-list')
     let newList = ""
     mostRecent.forEach(message => {
@@ -79,8 +79,6 @@ function addsToList(message) {
    {
     sender = message.sender
   }
-  return `
-    <li data-id='${message.id}'><strong>${sender}: </strong>${message.message}</li>
-    `
+  return `<li data-id='${message.id}'><strong>${sender}: </strong>${message.message}</li>`
 }
 

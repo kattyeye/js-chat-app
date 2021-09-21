@@ -8,10 +8,19 @@ margin:0 auto;
 
 }
 
+h4 {
+    text-transform: uppercase;
+}
 h2 {
 font-size: 50px;
 font-family: 'Roboto';
 font-weight: 900;
+margin-bottom:20px;
+}
+
+.btn {
+    background-color:hsla(339, 100%, 55%, 1) ;
+    color:white;
 }
 
 
@@ -43,7 +52,7 @@ box-shadow: lightgray;
 
 li:nth-child(odd) {
      border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 1rem;
     background: #45caff;
     width: 45%;
     position: relative;
@@ -55,7 +64,7 @@ li:nth-child(odd) {
 
 li:nth-child(even) {
       border: 1px solid black;
-    border-radius: 10px;
+   border-radius: 1rem;
     width:30%;
     position: absolute;
     right: 18%;
