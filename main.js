@@ -1,88 +1,84 @@
+(function () {
+    'use strict';
 
-// event listener on the whole page, on open fires off the followong functions
-document.addEventListener('DOMContentLoaded', function (ev) {
-// allows user to input their name
-let user = ""
-while (user == "") {
-    user = prompt("Please enter your name to continue.")
-}
-// puts name inside the input #from in html
-    document.querySelector('#from').value = user
-    grabMessages()
-    const refreshMessages = setInterval (function() {
-        grabMessages()
-    }, 100)
-const form = document.querySelector("#chat-form")
-  form.addEventListener("submit", function(ev) {
-    ev.preventDefault()
-    postMessages(ev.target)
-  })
+    let user = localStorage.getItem('user');
+    const messageList = document.querySelector('#message-list');
+    const chatForm = document.querySelector('#chat-form');
 
-})
-
-// grab messages
-function grabMessages() {
-    fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/")
-        .then(response => response.json())
-        .then(function (messages) {
-            showMessages(messages)
-        })
-}
-
-
-// posts
-function postMessages(form) {
-fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    body: JSON.stringify({
-        sender: form.sender.value,
-        message: form.message.value,
-      })
-    })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Oops, something went wrong!", response.status);
+    if (!user) {
+        user = prompt("Please enter your name to continue.");
+        localStorage.setItem('user', user);
     }
-    return response.json();
-  })
 
-    .then(function (json) {
-        grabMessages()
-        form.message.value = ""
-    })
+    function generateHTML(message) {
+        const html = `
+        <li>
+            <p><strong>${message.sender}: </strong>${message.message}</p>
+            <button data-id="${message.id}">Delete</button>
+        </li>
+        `
+        return html;
+    }
 
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Error:", error))
-}
+    function fetchMessages() {
+         fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/")
+            .then(response => response.json())
+            .then(function (messages) {
+                let html = "";
+                for (let i = 0; i < messages.length; i++) {
+                    html += generateHTML(messages[i]);
+                }
+                console.log('html', html)
+                messageList.innerHTML = html;
+            });
+    }
 
-//which messages are displayed on the screeen...only 10 at a time
-function showMessages(messages) {
-    const length = messages.length;
-    const mostRecent = messages.slice(length - 10)
-    const list = document.querySelector('#message-list')
-    let newList = ""
-    mostRecent.forEach(message => {
-        if (!!!document.querySelector(`li[data-id='${message.id}']`)) {
-      newList += addsToList(message)
+    fetchMessages();
+    setInterval(fetchMessages, 3000);
+
+    function deleteMessage(event) {
+        const id = event.target.dataset.id;
+
+        fetch(`https://tiny-taco-server.herokuapp.com/debbie-chat/${id}`, {
+            method: 'DELETE',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Oops, something went wrong!", response.status);
+                }
+                event.target.parentNode.remove();
+            });
+    }
+
+    messageList.addEventListener('click', deleteMessage);
+
+    function addMessage(event) {
+        event.preventDefault();
+        const message = {
+            sender: user,
+            message: event.target.message.value,
         }
-     })
 
-    if (newList != '') {
-            list.innerHTML += newList
-        }
+        fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(message)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Oops, something went wrong!", response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const html = generateHTML(data);
+                messageList.insertAdjacentHTML('beforeend', html);
+                event.target.reset();
+            });
+    }
 
-}
+    chatForm.addEventListener('submit', addMessage);
 
-
-// adds each message to the ul and attaches sender name
-function addsToList(message) {
-  let sender = document.querySelector("#sender")
-   {
-    sender = message.sender
-  }
-  return `<li data-id='${message.id}'><strong>${sender}: </strong>${message.message}</li>`
-}
-
+})();
