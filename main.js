@@ -15,13 +15,16 @@
         <li>
             <p><strong>${message.sender}: </strong>${message.message}</p>
             <button data-id="${message.id}">Delete</button>
+            <button data-id="${message.id}">Edit</button>
         </li>
         `
         return html;
     }
 
+
+
     function fetchMessages() {
-         fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/")
+        fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/")
             .then(response => response.json())
             .then(function (messages) {
                 let html = "";
@@ -30,11 +33,16 @@
                 }
                 console.log('html', html)
                 messageList.innerHTML = html;
-            });
+            })
+
+
     }
 
     fetchMessages();
     setInterval(fetchMessages, 3000);
+
+
+
 
     function deleteMessage(event) {
         const id = event.target.dataset.id;
@@ -50,6 +58,38 @@
             });
     }
 
+
+    function editMessage(event) {
+        const id = event.target.dataset.id;
+        const message = {
+            sender: user,
+            message: event.target.message.value,
+        }
+       fetch(`https://tiny-taco-server.herokuapp.com/debbie-chat/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(message)
+       })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Oops, something went wrong!", response.status);
+                }
+                return response.json()
+            })
+            .then(function (messages) {
+                let html = "";
+                for (let i = 0; i < messages.length; i++) {
+                    html += generateHTML(messages[i]);
+                }
+                console.log('html', html)
+                messageList.innerHTML = html;
+            })
+
+    }
+
+    messageList.addEventListener('click', editMessage);
     messageList.addEventListener('click', deleteMessage);
 
     function addMessage(event) {
@@ -70,7 +110,7 @@
                 if (!response.ok) {
                     throw new Error("Oops, something went wrong!", response.status);
                 }
-                return response.json();
+                return response.json()
             })
             .then(data => {
                 const html = generateHTML(data);
