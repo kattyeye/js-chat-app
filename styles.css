@@ -50,6 +50,17 @@ box-shadow: lightgray;
     color: black;
 }
 
+/* .scroller {
+    height: 200px;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+.scroller li:nth-child(odd), li:nth-child(even) {
+        scroll-snap-align: start;
+
+} */
+
 li:nth-child(odd) {
      border: 1px solid black;
     border-radius: 1rem;
@@ -76,6 +87,10 @@ li:nth-child(even) {
 #chat-form {
     margin-top:10%;
     display: flex;
+}
+
+#from {
+    margin-bottom:5px;
 }
 
 #newMessage {

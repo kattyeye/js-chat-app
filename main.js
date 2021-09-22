@@ -1,12 +1,12 @@
 
-
+// event listener on the whole page, on open fires off the followong functions
 document.addEventListener('DOMContentLoaded', function (ev) {
-
+// allows user to input their name
 let user = ""
 while (user == "") {
     user = prompt("Please enter your name to continue.")
 }
-
+// puts name inside the input #from in html
     document.querySelector('#from').value = user
     grabMessages()
     const refreshMessages = setInterval (function() {
@@ -20,7 +20,7 @@ const form = document.querySelector("#chat-form")
 
 })
 
-
+// grab messages
 function grabMessages() {
     fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/")
         .then(response => response.json())
@@ -29,6 +29,8 @@ function grabMessages() {
         })
 }
 
+
+// posts
 function postMessages(form) {
 fetch("https://tiny-taco-server.herokuapp.com/debbie-chat/", {
       method: "POST",
@@ -74,6 +76,8 @@ function showMessages(messages) {
 
 }
 
+
+// adds each message to the ul and attaches sender name
 function addsToList(message) {
   let sender = document.querySelector("#sender")
    {
